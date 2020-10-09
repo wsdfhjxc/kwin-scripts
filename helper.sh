@@ -14,8 +14,8 @@ upgrade)
     ;;
 
 package)
-    latestTag=$(git describe --tags --abbrev=0)
-    zip -r "virtual-desktops-only-on-primary-$latestTag.kwinscript" contents metadata.desktop
+    version=$(grep -Po "X-KDE-PluginInfo-Version=\K(.*)" metadata.desktop)
+    zip -r "virtual-desktops-only-on-primary-$version.kwinscript" contents metadata.desktop
     ;;
 
 show-console)
