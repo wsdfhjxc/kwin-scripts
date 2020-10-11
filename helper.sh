@@ -14,8 +14,9 @@ upgrade)
     ;;
 
 package)
+    script=$(basename "$(pwd)")
     version=$(grep -Po "X-KDE-PluginInfo-Version=\K(.*)" metadata.desktop)
-    zip -r "virtual-desktops-only-on-primary-$version.kwinscript" contents metadata.desktop
+    zip -r "$script-$version.kwinscript" contents metadata.desktop
     ;;
 
 show-console)
