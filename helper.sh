@@ -14,9 +14,9 @@ upgrade)
     ;;
 
 package)
-    script=$(basename "$(pwd)")
-    version=$(grep -Po "X-KDE-PluginInfo-Version=\K(.*)" metadata.desktop)
-    zip -r "$script-$version.kwinscript" contents metadata.desktop
+    name=$(basename "$(pwd)")
+    version=$(grep -Po "Version=\K(.*)" metadata.desktop)
+    zip -r "$name-$version.kwinscript" contents metadata.desktop
     ;;
 
 show-console)
