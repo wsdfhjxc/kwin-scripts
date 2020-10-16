@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=Temporary Virtual Desktops
+Comment=Automatically adds and removes virtual desktops
+Icon=preferences-desktop-virtual
+Type=Service
+
+X-KDE-PluginInfo-Name=temporary-virtual-desktops
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-Author=wsdfhjxc
+X-KDE-PluginInfo-License=GPLv3
+X-KDE-PluginInfo-EnabledByDefault=false
+
+X-KDE-ServiceTypes=KWin/Script
+X-Plasma-API=javascript
+X-Plasma-MainScript=code/main.js
