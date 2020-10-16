@@ -1,13 +1,13 @@
-function prepareWindow(window) {
+function bind(window) {
     window.previousScreen = window.screen;
-    window.screenChanged.connect(window, validateWindow);
-    window.desktopChanged.connect(window, validateWindow);
-    print("Prepared window " + window.windowId);
+    window.screenChanged.connect(window, update);
+    window.desktopChanged.connect(window, update);
+    print("Window " + window.windowId + " has been bound");
 }
 
-function validateWindow(window) {
+function update(window) {
     var window = window || this;
-
+    
     if (!window.normalWindow && window.skipTaskbar) {
         return;
     }
@@ -19,21 +19,22 @@ function validateWindow(window) {
 
     if (currentScreen != primaryScreen) {
         window.desktop = -1;
-        print("Pinned window " + window.windowId);
+        print("Window " + window.windowId + " has been pinned");
     } else if (previousScreen != primaryScreen) {
         window.desktop = workspace.currentDesktop;
-        print("Unpinned window " + window.windowId);
+        print("Window " + window.windowId + " has been unpinned");
     }
 }
 
-function main() {
-    workspace.clientList().forEach(prepareWindow);
-    workspace.clientList().forEach(validateWindow);
+function bindUpdate(window) {
+    bind(window);
+    update(window);
+}
 
-    workspace.clientAdded.connect(function(window) {
-        prepareWindow(window);
-        validateWindow(window);
-    });
+function main() {
+    workspace.clientList().forEach(bind);
+    workspace.clientList().forEach(update);
+    workspace.clientAdded.connect(bindUpdate);
 }
 
 main();
