@@ -22,8 +22,43 @@ After installing the script, it must be also enabled in the System Settings.
 
 ## Available scripts
 
+- [Simple Window Groups](#simple-window-groups)
 - [Temporary Virtual Desktops](#temporary-virtual-desktops)
 - [Virtual Desktops Only On Primary](#virtual-desktops-only-on-primary)
+
+## Simple Window Groups
+
+This is a script that provides a window grouping system, similar as in some window managers.
+
+Groups, as implemented in this script, are kind of a replacement for virtual desktops. A window can be added to multiple groups at the same time, and windows from different groups can be shown together or hidden on demand. Also, actual virtual desktops are completely ignored while using window groups, because it'd be too confusing to mix these concepts together. However, the regular virtual desktops workflow can be recreated with this script.
+
+The script isn't very convenient in regard to user experience in its current state - no visual cues, indicators etc.
+
+### Configuration and usage
+
+After enabling the script, and while still being in the System Settings, you should head up to the Shortcuts section and select the KWin component, as the script is controllable through keyboard shortcuts.
+
+There are 10 available window groups which can be used, and there are 3 actions that can be invoked for each of the groups. In total there are 30 keyboard shortcuts, but you don't need to set up all of them.
+
+The keyboard shortcuts allow you to toggle a group on the active window (add it to the group, or remove it), show or hide windows from a specific group (e.g. show windows from group 1 and group 3), and show exclusively windows from a specific group (in such case, all windows not present in that group will be hidden).
+
+By default, all new windows are added to groups which are visible at the moment of their opening. It means that when group 1 and group 3 are set to be shown, a new window will be added to both these groups.
+
+### Available keyboard shortcuts
+
+* Add/remove window to/from group 1..10
+* Show/hide windows from group 1..10
+* Show exclusively windows from group 1..10
+
+Note: All keyboard shortucts have `Simple Window Groups` prefix for easier recognition.
+
+### In case of some terrible things that could happen
+
+If your windows somehow become unaccessible, the following command will bring them back:
+
+```
+kwin_x11 --replace & disown
+```
 
 ## Temporary Virtual Desktops
 
