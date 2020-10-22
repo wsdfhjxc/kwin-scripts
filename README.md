@@ -6,7 +6,7 @@ The scripts are intended to be used under KDE Plasma.
 
 ## Installation
 
-Enter the directory of a choosen script, e.g.:
+Enter the directory of a chosen script, e.g.:
 
 ```
 cd virtual-desktops-only-on-primary
