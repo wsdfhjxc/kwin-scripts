@@ -32,7 +32,9 @@ This is a script that provides a window grouping system, similar as in some wind
 
 Groups, as implemented in this script, are kind of a replacement for virtual desktops. A window can be added to multiple groups at the same time, and windows from different groups can be shown together or hidden on demand. Also, actual virtual desktops are completely ignored while using window groups, because it'd be too confusing to mix these concepts together. However, the regular virtual desktops workflow can be recreated with this script.
 
-The script isn't very convenient in regard to user experience in its current state - no visual cues, indicators etc.
+<s>The script isn't very convenient in regard to user experience in its current state - no visual cues, indicators etc.</s>
+
+That's no longer true, at least to some extent. Please see the section about setting up the panel widget.
 
 ### Configuration and usage
 
@@ -59,6 +61,18 @@ If your windows somehow become unaccessible, the following command will bring th
 ```
 kwin_x11 --replace & disown
 ```
+
+### Setting up the panel widget
+
+The script sends data about its current state (used groups, visible groups) to the [Do It Yourself Bar](https://github.com/wsdfhjxc/do-it-yourself-bar) plasmoid.
+
+You can put an instance of that plasmoid in a Plasma's panel or Latte Dock. Please refer to the installation and configuration instructions in the plasmoid's readme. Everything is clearly explained there.
+
+Important information:
+
+* The plasmoid's instance ID should be set to `750`
+* Labels and indicators for the used groups use style A
+* Labels and indicators for the visible groups use style B
 
 ## Temporary Virtual Desktops
 
