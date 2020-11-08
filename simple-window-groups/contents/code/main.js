@@ -24,7 +24,7 @@ function bindWindows() {
 
 function unbindWindow(window) {
     if (windowIdGroupsMap[window.windowId]) {
-        windowIdGroupsMap[window.windowId] = undefined;
+        delete windowIdGroupsMap[window.windowId];
         print("Window " + window.windowId + " has been unbound");
     }
 }
