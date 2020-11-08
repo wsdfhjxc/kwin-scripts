@@ -44,6 +44,51 @@ function isWindowVisible(windowGroups) {
     return false;
 }
 
+function isGroupUsed(group) {
+    var keys = Object.keys(windowIdGroupsMap);
+    for (var i = 0; i < keys.length; i++) {
+        var windowGroups = windowIdGroupsMap[keys[i]];
+        if (windowGroups && windowGroups[group]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function updateDoItYourselfBarWidget() {
+    var id = "750";
+    var data = "";
+
+    for (var i = 0; i < numberOfGroups; i++) {
+        if (isGroupUsed(i)) {
+            // Start of the block
+            data += "| ";
+
+            // Style
+            data += visibleGroups[i] ? "B" : "A";
+            data += " | ";
+
+            // Label text
+            data += i + 1;
+            data += " | ";
+
+            // Tooltip text
+            data += "Show exclusively";
+            data += " | ";
+
+            // Command to be executed on click
+            data += "qdbus org.kde.kglobalaccel /component/kwin invokeShortcut "
+            data += "'Simple Window Groups - Show exclusively windows from group " + (i + 1) + "'";
+
+            // End of the block
+            data += " |";
+        }
+    }
+
+    callDBus("org.kde.plasma.doityourselfbar", "/id_" + id,
+             "org.kde.plasma.doityourselfbar", "pass", data);
+}
+
 function updateCurrentView() {
     workspace.clientList().forEach(function(window) {
         var windowGroups = windowIdGroupsMap[window.windowId];
@@ -53,6 +98,8 @@ function updateCurrentView() {
         var visible = isWindowVisible(windowGroups);
         showOrHideWindow(window, visible);
     });
+
+    updateDoItYourselfBarWidget();
 }
 
 function toggleGroupOnWindow(group, window) {
