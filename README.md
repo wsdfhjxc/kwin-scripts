@@ -64,7 +64,7 @@ You can put an instance of that plasmoid in a Plasma's panel or Latte Dock. Plea
 
 Important information:
 
-* The plasmoid's instance ID should be set to `750`
+* The plasmoid's instance ID should be set to 750
 * Labels and indicators for used groups use visual style A
 * Labels and indicators for visible groups use visual style B
 * Labels and indicators for visible & unused groups use style C
