@@ -60,12 +60,15 @@ function updateDoItYourselfBarWidget() {
     var data = "";
 
     for (var i = 0; i < numberOfGroups; i++) {
-        if (isGroupUsed(i)) {
+        var used = isGroupUsed(i);
+        var visible = visibleGroups[i];
+
+        if (used || visible) {
             // Start of the block
             data += "| ";
 
             // Style
-            data += visibleGroups[i] ? "B" : "A";
+            data += used && visible ? "B" : used ? "A" : "C";
             data += " | ";
 
             // Label text
