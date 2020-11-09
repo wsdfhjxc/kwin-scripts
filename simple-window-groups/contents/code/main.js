@@ -160,9 +160,9 @@ function registerKeyboardShortcut(name, action) {
     registerShortcut("Simple Window Groups - " + name, "", "", action);
 }
 
-function closure(func, i) {
+function closure(func, i, j) {
     return function() {
-        return func(i);
+        return func(i, j);
     }
 }
 
@@ -177,11 +177,44 @@ function registerKeyboardShortcuts() {
     }
 }
 
+function registerWindowMenuActions() {
+    registerUserActionsMenu(function(client) {
+        var menuActions = {
+            text: "Simple Window Groups",
+            items: []
+        };
+
+        var windowGroups = windowIdGroupsMap[client.windowId];
+        var assignedWindowGroups = windowGroups.filter(function(group) {
+            return group;
+        });
+
+        for (var i = 0; i < numberOfGroups; i++) {
+            // Ignore group, if it's the only assigned group
+            if (assignedWindowGroups.length == 1 && windowGroups[i]) {
+                continue;
+            }
+
+            var label = "Add to group " + (i + 1);
+            if (windowIdGroupsMap[client.windowId][i]) {
+                label = "Remove from group " + (i + 1);
+            }
+
+            menuActions.items.push({
+                text: label,
+                triggered: closure(toggleGroupOnWindow, i, client)
+            });
+        }
+        return menuActions;
+    });
+}
+
 function main() {
     initGroups();
     bindWindows();
     connectSignals();
     registerKeyboardShortcuts();
+    registerWindowMenuActions();
     updateCurrentView();
 }
 
