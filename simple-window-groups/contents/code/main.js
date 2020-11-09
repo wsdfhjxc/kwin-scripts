@@ -147,7 +147,10 @@ function connectSignals() {
         bindWindow(window);
         updateCurrentView();
     });
-    workspace.clientRemoved.connect(unbindWindow);
+    workspace.clientRemoved.connect(function(window) {
+        unbindWindow(window);
+        updateCurrentView();
+    });
 }
 
 function registerKeyboardShortcut(name, action) {
