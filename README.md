@@ -38,11 +38,13 @@ That's no longer true, at least to some extent. Please see the section about set
 
 ### Configuration and usage
 
-After enabling the script, and while still being in the System Settings, you should head up to the Shortcuts section and select the KWin component, as the script is controllable through keyboard shortcuts.
+After enabling the script, and while still being in the System Settings, you should head up to the Shortcuts section and select the KWin component, as the script is mostly controllable through keyboard shortcuts.
 
 There are 10 available window groups which can be used, and there are 3 actions that can be invoked for each of the groups. In total there are 30 keyboard shortcuts, but you don't need to set up all of them.
 
 The keyboard shortcuts allow you to toggle a group on the active window (add it to the group, or remove it), show or hide windows from a specific group (e.g. show windows from group 1 and group 3), and show exclusively windows from a specific group (in such case, all windows not present in that group will be hidden).
+
+Besides the keyboard shortcuts, you can also use the window actions menu (right-click on the titlebar) to add or remove windows from specific groups. That requires some clicking though, due to a couple of nested menus.
 
 By default, all new windows are added to groups which are visible at the moment of their opening. It means that when group 1 and group 3 are set to be shown, a new window will be added to both these groups.
 
@@ -54,14 +56,6 @@ By default, all new windows are added to groups which are visible at the moment 
 
 Note: All keyboard shortucts have `Simple Window Groups` prefix for easier recognition.
 
-### In case of some terrible things that could happen
-
-If your windows somehow become unaccessible, the following command will bring them back:
-
-```
-kwin_x11 --replace & disown
-```
-
 ### Setting up the panel widget
 
 The script sends data about its current state (used groups, visible groups) to the [Do It Yourself Bar](https://github.com/wsdfhjxc/do-it-yourself-bar) plasmoid.
@@ -71,8 +65,17 @@ You can put an instance of that plasmoid in a Plasma's panel or Latte Dock. Plea
 Important information:
 
 * The plasmoid's instance ID should be set to `750`
-* Labels and indicators for the used groups use style A
-* Labels and indicators for the visible groups use style B
+* Labels and indicators for used groups use visual style A
+* Labels and indicators for visible groups use visual style B
+* Labels and indicators for visible & unused groups use style C
+
+### In case of some terrible things that could happen
+
+If your windows become unaccessible, the following command will bring them back:
+
+```
+kwin_x11 --replace & disown
+```
 
 ## Temporary Virtual Desktops
 
