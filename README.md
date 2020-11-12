@@ -36,6 +36,8 @@ Groups, as implemented in this script, are kind of a replacement for virtual des
 
 That's no longer true, at least to some extent. Please see the section about setting up the panel widget.
 
+Note: The latest version considered as released is 1.0.
+
 ### Configuration and usage
 
 After enabling the script, and while still being in the System Settings, you should head up to the Shortcuts section and select the KWin component, as the script is mostly controllable through keyboard shortcuts.
@@ -85,6 +87,8 @@ When the script is enabled, virtual desktops will be added and removed in a way,
 
 Besides enabling the script in the System Settings, no additional steps are required.
 
+Note: The latest version considered as released is 0.1.
+
 ## Virtual Desktops Only On Primary
 
 This is a script that brings a feature similar to GNOME Mutter's `workspaces-only-on-primary` option, that is switchable virtual desktops on the primary monitor, and non-switchable virtual desktops on other monitors.
@@ -92,3 +96,5 @@ This is a script that brings a feature similar to GNOME Mutter's `workspaces-onl
 When the script is enabled, all windows placed on monitors other than the primary, are automatically set to be shown on all virtual desktops. This can be considered a hack, but from the user's perspective, this effectively results in having multiple switchable virtual desktops on the primary monitor, and fixed non-switchable virtual desktops on other monitors. That's how GNOME Shell handles workspaces by default, and the script mimics that.
 
 Besides enabling the script in the System Settings, no additional steps are required.
+
+Note: The latest version considered as released is 0.1.
