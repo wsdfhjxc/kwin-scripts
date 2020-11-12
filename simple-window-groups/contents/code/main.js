@@ -178,13 +178,13 @@ function registerKeyboardShortcuts() {
 }
 
 function registerWindowMenuActions() {
-    registerUserActionsMenu(function(client) {
+    registerUserActionsMenu(function(window) {
         var menuActions = {
             text: "Simple Window Groups",
             items: []
         };
 
-        var windowGroups = windowIdGroupsMap[client.windowId];
+        var windowGroups = windowIdGroupsMap[window.windowId];
         var assignedWindowGroups = windowGroups.filter(function(group) {
             return group;
         });
@@ -196,13 +196,13 @@ function registerWindowMenuActions() {
             }
 
             var label = "Add to group " + (i + 1);
-            if (windowIdGroupsMap[client.windowId][i]) {
+            if (windowIdGroupsMap[window.windowId][i]) {
                 label = "Remove from group " + (i + 1);
             }
 
             menuActions.items.push({
                 text: label,
-                triggered: closure(toggleGroupOnWindow, i, client)
+                triggered: closure(toggleGroupOnWindow, i, window)
             });
         }
         return menuActions;
