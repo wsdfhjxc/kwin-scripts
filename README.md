@@ -64,7 +64,7 @@ The script sends data about its current state (used groups, visible groups) to t
 
 You can put an instance of that plasmoid in a Plasma's panel or Latte Dock. Please refer to the installation and configuration instructions in the plasmoid's readme. Everything is clearly explained there.
 
-Important information:
+**Important information**
 
 * The plasmoid's instance ID should be set to 750
 * Labels and indicators for used groups use visual style A
