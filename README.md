@@ -36,7 +36,7 @@ Groups, as implemented in this script, are kind of a replacement for virtual des
 
 That's no longer true, at least to some extent. Please see the section about setting up the panel widget.
 
-Note: The latest version considered as released is 1.0.
+Note: The latest version considered as released is 1.0 ([view changelog](simple-window-groups/CHANGELOG.md)).
 
 ### Configuration and usage
 
@@ -87,7 +87,7 @@ When the script is enabled, virtual desktops will be added and removed in a way,
 
 Besides enabling the script in the System Settings, no additional steps are required.
 
-Note: The latest version considered as released is 0.1.
+Note: The latest version considered as released is 0.1 ([view changelog](temporary-virtual-desktops/CHANGELOG.md)).
 
 ## Virtual Desktops Only On Primary
 
@@ -97,4 +97,4 @@ When the script is enabled, all windows placed on monitors other than the primar
 
 Besides enabling the script in the System Settings, no additional steps are required.
 
-Note: The latest version considered as released is 0.1.
+Note: The latest version considered as released is 0.1 ([view changelog](virtual-desktops-only-on-primary/CHANGELOG.md)).
