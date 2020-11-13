@@ -1,11 +1,34 @@
-var visibleGroups = [];
+var groupArray = [];
 var numberOfGroups = 10;
-var windowIdGroupsMap = {};
 
 function initGroups() {
-    visibleGroups[0] = true;
-    for (var i = 1; i < numberOfGroups; i++) {
-        visibleGroups[i] = false;
+    for (var i = 0; i < numberOfGroups; i++) {
+        groupArray[i] = {
+            number: i + 1,
+            visible: i == 0,
+            windowIdArray: [],
+
+            isUsed: function() {
+                return this.windowIdArray.length > 0;
+            },
+
+            hasWindow: function(window) {
+                return this.windowIdArray.indexOf(window.windowId) >= 0;
+            },
+
+            addWindow: function(window) {
+                if (this.windowIdArray.indexOf(window.windowId) == -1) {
+                    this.windowIdArray.push(window.windowId);
+                }
+            },
+
+            removeWindow: function(window) {
+                var index = this.windowIdArray.indexOf(window.windowId);
+                if (index >= 0) {
+                    this.windowIdArray.splice(index, 1);
+                }
+            }
+        };
     }
 }
 
@@ -19,7 +42,12 @@ function bindWindow(window) {
         window.onAllDesktops = true;
     });
 
-    windowIdGroupsMap[window.windowId] = visibleGroups.slice();
+    groupArray.filter(function(group) {
+        return group.visible;
+    }).forEach(function(group) {
+        group.addWindow(window);
+    });
+
     print("Window " + window.windowId + " has been bound");
 }
 
@@ -28,10 +56,23 @@ function bindWindows() {
 }
 
 function unbindWindow(window) {
-    if (windowIdGroupsMap[window.windowId]) {
-        delete windowIdGroupsMap[window.windowId];
-        print("Window " + window.windowId + " has been unbound");
-    }
+    groupArray.forEach(function(group) {
+        group.removeWindow(window);
+    });
+
+    print("Window " + window.windowId + " has been unbound");
+}
+
+function isWindowBound(window) {
+    return groupArray.filter(function(group) {
+        return group.hasWindow(window);
+    }).length > 0;
+}
+
+function isWindowVisible(window) {
+    return groupArray.filter(function(group) {
+        return group.visible && group.hasWindow(window);
+    }).length > 0;
 }
 
 function showOrHideWindow(window, show) {
@@ -40,33 +81,13 @@ function showOrHideWindow(window, show) {
     window.skipSwitcher = !show;
 }
 
-function isWindowVisible(windowGroups) {
-    for (var i = 0; i < numberOfGroups; i++) {
-        if (windowGroups[i] && visibleGroups[i]) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function isGroupUsed(group) {
-    var keys = Object.keys(windowIdGroupsMap);
-    for (var i = 0; i < keys.length; i++) {
-        var windowGroups = windowIdGroupsMap[keys[i]];
-        if (windowGroups && windowGroups[group]) {
-            return true;
-        }
-    }
-    return false;
-}
-
 function updateDoItYourselfBarWidget() {
     var id = "750";
     var data = "";
 
-    for (var i = 0; i < numberOfGroups; i++) {
-        var used = isGroupUsed(i);
-        var visible = visibleGroups[i];
+    groupArray.forEach(function(group) {
+        var used = group.isUsed();
+        var visible = group.visible;
 
         if (used || visible) {
             // Start of the block
@@ -77,7 +98,7 @@ function updateDoItYourselfBarWidget() {
             data += " | ";
 
             // Label text
-            data += i + 1;
+            data += group.number;
             data += " | ";
 
             // Tooltip text
@@ -86,12 +107,12 @@ function updateDoItYourselfBarWidget() {
 
             // Command to be executed on click
             data += "qdbus org.kde.kglobalaccel /component/kwin invokeShortcut "
-            data += "'Simple Window Groups - Show exclusively windows from group " + (i + 1) + "'";
+            data += "'Simple Window Groups - Show exclusively windows from group " + group.number + "'";
 
             // End of the block
             data += " |";
         }
-    }
+    });
 
     callDBus("org.kde.plasma.doityourselfbar", "/id_" + id,
              "org.kde.plasma.doityourselfbar", "pass", data);
@@ -99,12 +120,10 @@ function updateDoItYourselfBarWidget() {
 
 function updateCurrentView() {
     workspace.clientList().forEach(function(window) {
-        var windowGroups = windowIdGroupsMap[window.windowId];
-        if (!windowGroups) {
-            return;
+        if (isWindowBound(window)) {
+            var visible = isWindowVisible(window);
+            showOrHideWindow(window, visible);
         }
-        var visible = isWindowVisible(windowGroups);
-        showOrHideWindow(window, visible);
     });
 
     updateDoItYourselfBarWidget();
@@ -112,40 +131,46 @@ function updateCurrentView() {
 
 function toggleGroupOnWindow(group, window) {
     window = window || workspace.activeClient;
-    var windowGroups = windowIdGroupsMap[window.windowId];
-    var assignedWindowGroups = windowGroups.filter(function(group) {
-        return group;
+    var windowGroupArray = groupArray.filter(function(group) {
+        return group.hasWindow(window);
     });
 
     // Don't touch a group, if it's the only assigned group
-    if (assignedWindowGroups.length == 1 && windowGroups[group]) {
+    if (windowGroupArray.length == 1 &&
+        windowGroupArray[0] == group) {
         return;
     }
 
-    windowGroups[group] = !windowGroups[group];
+    var added = false;
+    if (group.hasWindow(window)) {
+        group.removeWindow(window);
+    } else {
+        group.addWindow(window);
+        added = true;
+    }
 
     print("Window " + window.windowId + " has been " +
-          (windowGroups[group] ? "added to " : "removed from ") +
-          "group " + (group + 1));
+          (added ? "added to " : "removed from ") +
+          "group " + group.number);
 
     updateCurrentView();
 }
 
 function toggleGroupVisibility(group) {
-    visibleGroups[group] = !visibleGroups[group];
+    group.visible = !group.visible;
 
-    print("Group " + (group + 1) + " has been set to be " +
-          (visibleGroups[group] ? "visible" : "hidden"));
+    print("Group " + group.number + " has been set to be " +
+          (group.visible ? "visible" : "hidden"));
 
     updateCurrentView();
 }
 
 function setExclusiveGroupVisibility(group) {
-    for (var i = 0; i < numberOfGroups; i++) {
-        visibleGroups[i] = i == group;
-    }
+    groupArray.forEach(function(someGroup) {
+        someGroup.visible = someGroup == group;
+    });
 
-    print("Group " + (group + 1) + " has been set to be exclusively visible");
+    print("Group " + group.number + " has been set to be exclusively visible");
 
     updateCurrentView();
 }
@@ -172,14 +197,14 @@ function closure(func, i, j) {
 }
 
 function registerKeyboardShortcuts() {
-    for (var i = 0; i < numberOfGroups; i++) {
-        registerKeyboardShortcut("Add/remove window to/from group " + (i + 1),
-                                 closure(toggleGroupOnWindow, i));
-        registerKeyboardShortcut("Show/hide windows from group " + (i + 1),
-                                 closure(toggleGroupVisibility, i));
-        registerKeyboardShortcut("Show exclusively windows from group " + (i + 1),
-                                 closure(setExclusiveGroupVisibility, i));
-    }
+    groupArray.forEach(function(group) {
+        registerKeyboardShortcut("Add/remove window to/from group " + group.number,
+                                 closure(toggleGroupOnWindow, group));
+        registerKeyboardShortcut("Show/hide windows from group " + group.number,
+                                 closure(toggleGroupVisibility, group));
+        registerKeyboardShortcut("Show exclusively windows from group " + group.number,
+                                 closure(setExclusiveGroupVisibility, group));
+    });
 }
 
 function registerWindowMenuActions() {
@@ -189,27 +214,22 @@ function registerWindowMenuActions() {
             items: []
         };
 
-        var windowGroups = windowIdGroupsMap[window.windowId];
-        var assignedWindowGroups = windowGroups.filter(function(group) {
-            return group;
+        var windowGroupArray = groupArray.filter(function(group) {
+            return group.hasWindow(window);
         });
 
-        for (var i = 0; i < numberOfGroups; i++) {
+        groupArray.forEach(function(group) {
             // Ignore group, if it's the only assigned group
-            if (assignedWindowGroups.length == 1 && windowGroups[i]) {
-                continue;
-            }
-
-            var label = "Add to group " + (i + 1);
-            if (windowIdGroupsMap[window.windowId][i]) {
-                label = "Remove from group " + (i + 1);
+            if (windowGroupArray.length == 1 &&
+                windowGroupArray[0] == group) {
+                return;
             }
 
             menuActions.items.push({
-                text: label,
-                triggered: closure(toggleGroupOnWindow, i, window)
+                text: (group.hasWindow(window) ? "Remove from group " : "Add to group ") + group.number,
+                triggered: closure(toggleGroupOnWindow, group, window)
             });
-        }
+        });
         return menuActions;
     });
 }
