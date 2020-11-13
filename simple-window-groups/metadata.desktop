@@ -5,7 +5,7 @@ Icon=window-duplicate
 Type=Service
 
 X-KDE-PluginInfo-Name=simple-window-groups
-X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-Version=1.1
 X-KDE-PluginInfo-Author=wsdfhjxc
 X-KDE-PluginInfo-License=GPLv3
 X-KDE-PluginInfo-EnabledByDefault=false
