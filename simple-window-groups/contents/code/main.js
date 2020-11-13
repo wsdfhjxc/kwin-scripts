@@ -1,12 +1,23 @@
 var groupArray = [];
 var numberOfGroups = 10;
 
+function delay(milliseconds, callbackFunc) {
+    var timer = new QTimer();
+    timer.timeout.connect(function() {
+        timer.stop();
+        callbackFunc();
+    });
+    timer.start(milliseconds);
+    return timer;
+}
+
 function initGroups() {
     for (var i = 0; i < numberOfGroups; i++) {
         groupArray[i] = {
             number: i + 1,
             visible: i == 0,
             windowIdArray: [],
+            focusedWindowId: null,
 
             isUsed: function() {
                 return this.windowIdArray.length > 0;
@@ -26,6 +37,9 @@ function initGroups() {
                 var index = this.windowIdArray.indexOf(window.windowId);
                 if (index >= 0) {
                     this.windowIdArray.splice(index, 1);
+                    if (this.focusedWindowId == window.windowId) {
+                        this.focusedWindowId = null;
+                    }
                 }
             }
         };
@@ -156,8 +170,49 @@ function toggleGroupOnWindow(group, window) {
     updateCurrentView();
 }
 
+function updateGroupsForFocusedWindow(window) {
+    if (!window) {
+        return;
+    }
+    groupArray.filter(function(group) {
+        return group.visible && group.hasWindow(window);
+    }).forEach(function(group) {
+        print("Window " + window.windowId + " focused in group " + group.number);
+        group.focusedWindowId = window.windowId;
+    });
+}
+
+function restoreFocusedWindow(group) {
+    if (group.focusedWindowId) {
+        var window = workspace.getClient(group.focusedWindowId);
+
+        delay(50, function() {
+            if (!window) {
+                return;
+            }
+
+            // First bring it to front
+            if (!window.keepAbove) {
+                window.keepAbove = true;
+                window.keepAbove = false;
+            } else {
+                window.keepAbove = false;
+                window.keepAbove = true;
+            }
+
+            // Then set it as focused
+            workspace.activeClient = window;
+
+            print("Window " + group.focusedWindowId + " focus restored in group " + group.number);
+        });
+    }
+}
+
 function toggleGroupVisibility(group) {
     group.visible = !group.visible;
+    if (group.visible) {
+        restoreFocusedWindow(group);
+    }
 
     print("Group " + group.number + " has been set to be " +
           (group.visible ? "visible" : "hidden"));
@@ -168,6 +223,9 @@ function toggleGroupVisibility(group) {
 function setExclusiveGroupVisibility(group) {
     groupArray.forEach(function(someGroup) {
         someGroup.visible = someGroup == group;
+        if (someGroup.visible) {
+            restoreFocusedWindow(group);
+        }
     });
 
     print("Group " + group.number + " has been set to be exclusively visible");
@@ -183,6 +241,9 @@ function connectSignals() {
     workspace.clientRemoved.connect(function(window) {
         unbindWindow(window);
         updateCurrentView();
+    });
+    workspace.clientActivated.connect(function(window) {
+        updateGroupsForFocusedWindow(window);
     });
 }
 
