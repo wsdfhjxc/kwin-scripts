@@ -14,6 +14,11 @@ function bindWindow(window) {
         return;
     }
     window.onAllDesktops = true;
+    window.desktopChanged.connect(window, function() {
+        var window = this;
+        window.onAllDesktops = true;
+    });
+
     windowIdGroupsMap[window.windowId] = visibleGroups.slice();
     print("Window " + window.windowId + " has been bound");
 }
