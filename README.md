@@ -36,7 +36,7 @@ Groups, as implemented in this script, are kind of a replacement for virtual des
 
 That's no longer true, at least to some extent. Please see the section about setting up the panel widget.
 
-Note: The latest version considered as released is 1.0 ([view changelog](simple-window-groups/CHANGELOG.md)).
+Note: The latest version considered as released is 1.1 ([view changelog](simple-window-groups/CHANGELOG.md)).
 
 ### Configuration and usage
 
