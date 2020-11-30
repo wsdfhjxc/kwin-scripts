@@ -73,7 +73,9 @@ You can put an instance of that plasmoid in a Plasma's panel or Latte Dock. Plea
 
 ### In case of some terrible things that could happen
 
-If your windows become unaccessible, the following command will bring them back:
+Potentially, there is a chance that your windows might become unaccessible.
+
+In order to restore the windows, open KRunner (Alt+Space), launch Konsole and run:
 
 ```
 kwin_x11 --replace & disown
