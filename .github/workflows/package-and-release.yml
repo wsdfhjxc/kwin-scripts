@@ -1,0 +1,108 @@
+name: Package and release
+
+on:
+  push:
+    tags:
+    - '*'
+
+  workflow_dispatch:
+    inputs:
+        tag:
+          description: 'Tag'
+          required: true
+
+jobs:
+  package-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+
+      - name: Package script
+        shell: bash
+        run: |
+          case $GITHUB_EVENT_NAME in
+              workflow_dispatch)
+                  TAG=${{ github.event.inputs.tag }}
+                  ;;
+              push)
+                  REF=${{ github.ref }}
+                  TAG=${REF/refs\/tags\//}
+                  ;;
+              *)
+                  echo "Unknown event!"
+                  exit 1
+                  ;;
+          esac
+
+          git fetch --unshallow && \
+          git checkout "$TAG" || {
+              echo "Couldn't checkout!"
+          }
+
+          SCRIPT=$(echo $TAG | grep -Po ".*(?=-\d\.)")
+          VERSION=$(echo $TAG | grep -Po ".*-\K\d\..*")
+
+          cd "$SCRIPT" || {
+              echo "Couldn't cd!"
+          }
+
+          ../helper.sh package || {
+              echo "Couldn't package!"
+          }
+
+          ASSET_NAME=$(ls *.kwinscript | head -n 1)
+          ASSET_PATH="$SCRIPT/$ASSET_NAME"
+
+          echo "TAG=$TAG" >> $GITHUB_ENV
+          echo "SCRIPT=$SCRIPT" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "ASSET_NAME=$ASSET_NAME" >> $GITHUB_ENV
+          echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
+
+      - name: Prepare release notes
+        shell: bash
+        run: |
+          CHANGELOG_FILE="${{ env.SCRIPT }}/CHANGELOG.md"
+          RELEASE_NOTES_PATH="${{ env.SCRIPT }}/RELEASE_NOTES.md"
+
+          VERSION=${{ env.VERSION }}
+          VERSION_ESC=${VERSION/./\\.}
+
+          [[ $(cat "$CHANGELOG_FILE" | grep -Po ".*#{2}\s+$VERSION_ESC") ]] || {
+              echo "No given version in changelog!"
+              exit 1
+          }
+
+          CHANGELOG=$(cat "$CHANGELOG_FILE")
+          CHANGELOG=${CHANGELOG//$'\n'/$'\a'}
+
+          RELEASE_NOTES=$(echo $CHANGELOG | grep -Po ".*#{2}\s+$VERSION_ESC\a*\K.*")
+          while [[ $(echo "$RELEASE_NOTES" | grep -cPo ".*(?=\a+#{2}\s+)") -gt 0 ]]; do
+              RELEASE_NOTES=$(echo "$RELEASE_NOTES" | grep -Po ".*(?=\a+#{2}\s+)")
+          done
+
+          RELEASE_NOTES=${RELEASE_NOTES//$'\a'/$'\n'}
+
+          echo "$RELEASE_NOTES" > "$RELEASE_NOTES_PATH"
+          echo "RELEASE_NOTES_PATH=$RELEASE_NOTES_PATH" >> $GITHUB_ENV
+
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.TAG }}
+          release_name: 'Release: ${{ env.TAG }}'
+          body_path: ${{ env.RELEASE_NOTES_PATH }}
+
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_name: ${{ env.ASSET_NAME }}
+          asset_path: ${{ env.ASSET_PATH }}
+          asset_content_type: application/zip
