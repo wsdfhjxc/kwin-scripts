@@ -6,6 +6,14 @@ The scripts are intended to be used under KDE Plasma.
 
 ## Installation
 
+### kwinscript file
+
+Visit the [releases section](https://github.com/wsdfhjxc/kwin-scripts/releases) and download the kwinscript file of a chosen script.
+
+After that, you will be able to select this file in System Settings (KWin Scripts, Install from File).
+
+### From source
+
 Enter the directory of a chosen script, e.g.:
 
 ```
