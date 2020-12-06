@@ -97,6 +97,7 @@ function connectSignals() {
     workspace.clientRemoved.connect(update);
     workspace.clientActivated.connect(update);
     workspace.currentDesktopChanged.connect(update);
+    workspace.clientDemandsAttentionChanged.connect(update);
 }
 
 function main() {
