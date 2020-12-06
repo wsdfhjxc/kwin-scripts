@@ -4,8 +4,8 @@ var filterByScreens;
 var filterByDesktops;
 
 function loadConfig() {
-    filterByScreens = readConfig("filterByScreens", true);
-    filterByDesktops = readConfig("filterByDesktops", true);
+    filterByScreens = readConfig("filterByScreens", "true") == "true";
+    filterByDesktops = readConfig("filterByDesktops", "true") == "true";
 }
 
 function updateDoItYourselfBarWidget() {
