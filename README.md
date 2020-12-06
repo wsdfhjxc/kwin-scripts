@@ -40,11 +40,7 @@ This is a script that provides a window grouping system, similar as in some wind
 
 Groups, as implemented in this script, are kind of a replacement for virtual desktops. A window can be added to multiple groups at the same time, and windows from different groups can be shown together or hidden on demand. Also, actual virtual desktops are completely ignored while using window groups, because it'd be too confusing to mix these concepts together. However, the regular virtual desktops workflow can be recreated with this script.
 
-<s>The script isn't very convenient in regard to user experience in its current state - no visual cues, indicators etc.</s>
-
-That's no longer true, at least to some extent. Please see the section about setting up the panel widget.
-
-Note: The latest version considered as released is 1.1 ([view changelog](simple-window-groups/CHANGELOG.md)).
+On its own, the script isn't very convenient in regard to user experience. However, you can use an additional panel widget which will display visual cues, like the Pager applet. Please see the section about setting up the panel widget.
 
 ### Configuration and usage
 
