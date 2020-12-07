@@ -31,6 +31,7 @@ After installing the script, it must be also enabled in the System Settings.
 ## Available scripts
 
 - [Simple Window Groups](#simple-window-groups)
+- [Task Manager - Do It Yourself Bar](#task-manager---do-it-yourself-bar)
 - [Temporary Virtual Desktops](#temporary-virtual-desktops)
 - [Virtual Desktops Only On Primary](#virtual-desktops-only-on-primary)
 
@@ -85,6 +86,51 @@ In order to restore the windows, open KRunner (Alt+Space), launch Konsole and ru
 kwin_x11 --replace & disown
 ```
 
+## Task Manager - Do It Yourself Bar
+
+This is a script to create a text-only task manager with the use of the Do It Yourself Bar plasmoid.
+
+Note: The script requires the `xdotool` program to be installed, so it's possible to switch between windows.
+
+### Configuration and usage
+
+Besides enabling the script in the System Settings, and setting up the required panel widget (see the next section), there are also two possible configuration options which can be changed. There is no configuration dialog though.
+
+The first option is about filtering windows by screens/monitors (enabled by default). To change it, run:
+
+```
+kwriteconfig5 --file ~/.config/kwinrc \
+--group Script-task-manager-do-it-yourself-bar \
+--key filterByScreens false
+```
+
+The second option is about filtering windows by virtual desktops (enabled by default). To change it, run:
+
+```
+kwriteconfig5 --file ~/.config/kwinrc \
+--group Script-task-manager-do-it-yourself-bar \
+--key filterByDesktops false
+```
+
+To apply the changes, the script needs to be restarted, but the quickest way is to just restart KWin:
+
+```
+kwin_x11 --replace & disown
+```
+
+### Setting up the panel widget
+
+The script sends data about visible windows to the [Do It Yourself Bar](https://github.com/wsdfhjxc/do-it-yourself-bar) plasmoid.
+
+You can put an instance of that plasmoid in a Plasma's panel or Latte Dock. Please refer to the installation and configuration instructions in the plasmoid's readme. Everything is clearly explained there.
+
+**Important information**
+
+* The instance ID should be set to 740
+* Titles of idle windows use visual style A
+* Titles of active windows use visual style B
+* Titles of windows needing attention use style C
+
 ## Temporary Virtual Desktops
 
 This is a script that automatically adds and removes virtual desktops.
@@ -93,8 +139,6 @@ When the script is enabled, virtual desktops will be added and removed in a way,
 
 Besides enabling the script in the System Settings, no additional steps are required.
 
-Note: The latest version considered as released is 0.1 ([view changelog](temporary-virtual-desktops/CHANGELOG.md)).
-
 ## Virtual Desktops Only On Primary
 
 This is a script that brings a feature similar to GNOME Mutter's `workspaces-only-on-primary` option, that is switchable virtual desktops on the primary monitor, and non-switchable virtual desktops on other monitors.
@@ -102,5 +146,3 @@ This is a script that brings a feature similar to GNOME Mutter's `workspaces-onl
 When the script is enabled, all windows placed on monitors other than the primary, are automatically set to be shown on all virtual desktops. This can be considered a hack, but from the user's perspective, this effectively results in having multiple switchable virtual desktops on the primary monitor, and fixed non-switchable virtual desktops on other monitors. That's how GNOME Shell handles workspaces by default, and the script mimics that.
 
 Besides enabling the script in the System Settings, no additional steps are required.
-
-Note: The latest version considered as released is 0.1 ([view changelog](virtual-desktops-only-on-primary/CHANGELOG.md)).
