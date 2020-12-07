@@ -88,7 +88,7 @@ kwin_x11 --replace & disown
 
 ## Task Manager - Do It Yourself Bar
 
-This is a script to create a text-only task manager with the use of the Do It Yourself Bar plasmoid.
+This is a script to create a text-only task manager with the use of the [Do It Yourself Bar](https://github.com/wsdfhjxc/do-it-yourself-bar) plasmoid.
 
 Note: The script requires the `xdotool` program to be installed, so it's possible to switch between windows.
 
