@@ -1,0 +1,57 @@
+name: Package
+
+on:
+  workflow_dispatch:
+    inputs:
+        script:
+          description: Script
+          required: true
+        commit:
+          description: Commit/tag
+          required: false
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v2
+
+      - name: Package script
+        shell: bash
+        run: |
+          SCRIPT=${{ github.event.inputs.script }}
+          [[ -z "$SCRIPT" ]] && {
+              echo "No script provided!"
+              exit 1
+          }
+
+          COMMIT=${{ github.event.inputs.commit }}
+          [[ -z "$COMMIT" ]] && {
+              COMMIT="."
+          }
+
+          git fetch --unshallow && \
+          git checkout "$COMMIT" || {
+              echo "Couldn't checkout!"
+          }
+
+          cd "$SCRIPT" || {
+              echo "Couldn't cd!"
+          }
+
+          ../helper.sh package || {
+              echo "Couldn't package!"
+          }
+
+          ASSET_NAME=$(ls *.kwinscript | head -n 1)
+          ASSET_PATH="$SCRIPT/$ASSET_NAME"
+
+          echo "ASSET_NAME=$ASSET_NAME" >> $GITHUB_ENV
+          echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.ASSET_NAME }}
+          path: ${{ env.ASSET_PATH }}
