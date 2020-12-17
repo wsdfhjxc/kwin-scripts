@@ -14,17 +14,22 @@ After that, you will be able to select this file in System Settings (KWin Script
 
 ### From source
 
-Enter the directory of a chosen script, e.g.:
+To install a script, run:
+```
+./helper.sh install name-of-the-script
+```
+
+To upgrade a script to a newer version, run:
 
 ```
-cd virtual-desktops-only-on-primary
+./helper.sh upgrade name-of-the-script
 ```
 
-To install the script, run: `../helper.sh install`
+To uninstall a script, regardless of the installation method, run:
 
-To upgrade the script to a newer version, run: `../helper.sh upgrade`
-
-To uninstall the script, regardless of the installation method, run: `../helper.sh uninstall`
+```
+./helper.sh uninstall name-of-the-script
+```
 
 After installing the script, it must be also enabled in the System Settings.
 
