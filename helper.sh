@@ -1,7 +1,7 @@
 #!/bin/bash
 
 printUsage() {
-    echo "Usage: helper.sh name-of-the-script install|uninstall|upgrade|package"
+    echo "Usage: helper.sh install|uninstall|upgrade|package name-of-the-script"
     echo "   or: helper.sh showInteractiveConsole"
 }
 
