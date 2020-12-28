@@ -11,15 +11,7 @@ The scripts are intended to be used under KDE Plasma.
   - [kwinscript file](#kwinscript-file)
 - [Available scripts](#available-scripts)
   - [Simple Window Groups](#simple-window-groups)
-    - [Configuration and usage](#configuration-and-usage)
-    - [Available keyboard shortcuts](#available-keyboard-shortcuts)
-    - [Setting up the panel widget](#setting-up-the-panel-widget)
-      - [Important information](#important-information)
-    - [In case of terrible things that could happen](#in-case-of-terrible-things-that-could-happen)
   - [Task Manager - Do It Yourself Bar](#task-manager---do-it-yourself-bar)
-    - [Configuration and usage](#configuration-and-usage-1)
-    - [Setting up the panel widget](#setting-up-the-panel-widget-1)
-      - [Important information](#important-information-1)
   - [Temporary Virtual Desktops](#temporary-virtual-desktops)
   - [Virtual Desktops Only On Primary](#virtual-desktops-only-on-primary)
 - [Experimental](#experimental)
@@ -90,12 +82,12 @@ The script sends data about its current state (used groups, visible groups) to t
 
 You can put an instance of that plasmoid in a Plasma's panel or Latte Dock. Please refer to the installation and configuration instructions in the plasmoid's readme. Everything is clearly explained there.
 
-##### Important information
+Here are some configuration hints:
 
 * The plasmoid's instance ID should be set to 750
 * Labels and indicators for used groups use visual style A
 * Labels and indicators for visible groups use visual style B
-* Labels and indicators for visible & unused groups use style C
+* Labels and indicators for visible unused groups use style C
 
 #### In case of terrible things that could happen
 
@@ -145,7 +137,7 @@ The script sends data about visible windows to the [Do It Yourself Bar](https://
 
 You can put an instance of that plasmoid in a Plasma's panel or Latte Dock. Please refer to the installation and configuration instructions in the plasmoid's readme. Everything is clearly explained there.
 
-##### Important information
+Here are some configuration hints:
 
 * The instance ID should be set to 740
 * Titles of idle windows use visual style A
