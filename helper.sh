@@ -28,11 +28,12 @@ package() {
         exit 1
     }
 
-    (
-        cd "$scriptName"
-        scriptVersion=$(grep -Po "Version=\K(.*)" metadata.desktop)
-        zip -r "$scriptName-$scriptVersion.kwinscript" contents metadata.desktop
-    )
+    cd "$scriptName"
+
+    scriptVersion=$(grep -Po "Version=\K(.*)" metadata.desktop)
+    zip -r "$scriptName-$scriptVersion.kwinscript" contents metadata.desktop
+
+    cd ..
 }
 
 case $1 in
@@ -46,7 +47,7 @@ case $1 in
         }
 
         $command "$scriptName"
-    ;;
+        ;;
 
     showConsole)
         qdbus org.kde.plasmashell /PlasmaShell showInteractiveKWinConsole
