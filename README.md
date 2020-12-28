@@ -20,6 +20,7 @@ The scripts are intended to be used under KDE Plasma.
     - [Setting up the panel widget](#setting-up-the-panel-widget-1)
   - [Temporary Virtual Desktops](#temporary-virtual-desktops)
   - [Virtual Desktops Only On Primary](#virtual-desktops-only-on-primary)
+- [Experimental](#experimental)
 - [License](#license)
 
 ## Installation
@@ -164,6 +165,12 @@ This is a script that brings a feature similar to GNOME Mutter's `workspaces-onl
 When the script is enabled, all windows placed on monitors other than the primary, are automatically set to be shown on all virtual desktops. This can be considered a hack, but from the user's perspective, this effectively results in having multiple switchable virtual desktops on the primary monitor, and fixed non-switchable virtual desktops on other monitors. That's how GNOME Shell handles workspaces by default, and the script mimics that.
 
 Besides enabling the script in the System Settings, no additional steps are required.
+
+## Experimental
+
+The `experimental` directory contains some, potentially useful, code snippets.
+
+At the moment, there is a JS-timer-like function for delayed code execution, a function for running a command on the system (not reliable in 100%), or a function that makes it easy to show a notification from a KWin script.
 
 ## License
 
