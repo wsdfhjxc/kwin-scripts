@@ -4,13 +4,25 @@ This is a repository with some KWin scripts.
 
 The scripts are intended to be used under KDE Plasma.
 
+## Table of Contents
+
+- [Installation](#installation)
+  - [From source](#from-source)
+  - [kwinscript file](#kwinscript-file)
+- [Available scripts](#available-scripts)
+  - [Simple Window Groups](#simple-window-groups)
+    - [Configuration and usage](#configuration-and-usage)
+    - [Available keyboard shortcuts](#available-keyboard-shortcuts)
+    - [Setting up the panel widget](#setting-up-the-panel-widget)
+    - [In case of terrible things that could happen](#in-case-of-terrible-things-that-could-happen)
+  - [Task Manager - Do It Yourself Bar](#task-manager---do-it-yourself-bar)
+    - [Configuration and usage](#configuration-and-usage-1)
+    - [Setting up the panel widget](#setting-up-the-panel-widget-1)
+  - [Temporary Virtual Desktops](#temporary-virtual-desktops)
+  - [Virtual Desktops Only On Primary](#virtual-desktops-only-on-primary)
+- [License](#license)
+
 ## Installation
-
-### kwinscript file
-
-Visit the [releases section](https://github.com/wsdfhjxc/kwin-scripts/releases) and download the kwinscript file of a chosen script.
-
-After that, you will be able to select this file in System Settings (KWin Scripts, Install from File).
 
 ### From source
 
@@ -33,14 +45,15 @@ To uninstall a script, regardless of the installation method, run:
 
 After installing the script, it must be also enabled in the System Settings.
 
+### kwinscript file
+
+Visit the [releases section](https://github.com/wsdfhjxc/kwin-scripts/releases) and download the kwinscript file of a chosen script.
+
+After that, you will be able to select this file in System Settings (KWin Scripts, Install from File).
+
 ## Available scripts
 
-- [Simple Window Groups](#simple-window-groups)
-- [Task Manager - Do It Yourself Bar](#task-manager---do-it-yourself-bar)
-- [Temporary Virtual Desktops](#temporary-virtual-desktops)
-- [Virtual Desktops Only On Primary](#virtual-desktops-only-on-primary)
-
-## Simple Window Groups
+### Simple Window Groups
 
 This is a script that provides a window grouping system, similar as in some window managers.
 
@@ -48,7 +61,7 @@ Groups, as implemented in this script, are kind of a replacement for virtual des
 
 On its own, the script isn't very convenient in regard to user experience. However, you can use an additional panel widget which will display visual cues, like the Pager applet. Please see the section about setting up the panel widget.
 
-### Configuration and usage
+#### Configuration and usage
 
 After enabling the script, and while still being in the System Settings, you should head up to the Shortcuts section and select the KWin component, as the script is mostly controllable through keyboard shortcuts.
 
@@ -60,7 +73,7 @@ Besides the keyboard shortcuts, you can also use the window actions menu (right-
 
 By default, all new windows are added to groups which are visible at the moment of their opening. It means that when group 1 and group 3 are set to be shown, a new window will be added to both these groups.
 
-### Available keyboard shortcuts
+#### Available keyboard shortcuts
 
 * Add/remove window to/from group 1..10
 * Show/hide windows from group 1..10
@@ -68,7 +81,7 @@ By default, all new windows are added to groups which are visible at the moment 
 
 Note: All keyboard shortucts have `Simple Window Groups` prefix for easier recognition.
 
-### Setting up the panel widget
+#### Setting up the panel widget
 
 The script sends data about its current state (used groups, visible groups) to the [Do It Yourself Bar](https://github.com/wsdfhjxc/do-it-yourself-bar) plasmoid.
 
@@ -81,7 +94,7 @@ You can put an instance of that plasmoid in a Plasma's panel or Latte Dock. Plea
 * Labels and indicators for visible groups use visual style B
 * Labels and indicators for visible & unused groups use style C
 
-### In case of some terrible things that could happen
+#### In case of terrible things that could happen
 
 Potentially, there is a chance that your windows might become unaccessible.
 
@@ -91,13 +104,13 @@ In order to restore the windows, open KRunner (Alt+Space), launch Konsole and ru
 kwin_x11 --replace & disown
 ```
 
-## Task Manager - Do It Yourself Bar
+### Task Manager - Do It Yourself Bar
 
 This is a script to create a text-only task manager with the use of the [Do It Yourself Bar](https://github.com/wsdfhjxc/do-it-yourself-bar) plasmoid.
 
 Note: The script requires the `xdotool` program to be installed, so it's possible to switch between windows.
 
-### Configuration and usage
+#### Configuration and usage
 
 Besides enabling the script in the System Settings, and setting up the required panel widget (see the next section), there are also two possible configuration options which can be changed. There is no configuration dialog though.
 
@@ -123,7 +136,7 @@ To apply the changes, the script needs to be restarted, but the quickest way is 
 kwin_x11 --replace & disown
 ```
 
-### Setting up the panel widget
+#### Setting up the panel widget
 
 The script sends data about visible windows to the [Do It Yourself Bar](https://github.com/wsdfhjxc/do-it-yourself-bar) plasmoid.
 
@@ -136,7 +149,7 @@ You can put an instance of that plasmoid in a Plasma's panel or Latte Dock. Plea
 * Titles of active windows use visual style B
 * Titles of windows needing attention use style C
 
-## Temporary Virtual Desktops
+### Temporary Virtual Desktops
 
 This is a script that automatically adds and removes virtual desktops.
 
@@ -144,10 +157,14 @@ When the script is enabled, virtual desktops will be added and removed in a way,
 
 Besides enabling the script in the System Settings, no additional steps are required.
 
-## Virtual Desktops Only On Primary
+### Virtual Desktops Only On Primary
 
 This is a script that brings a feature similar to GNOME Mutter's `workspaces-only-on-primary` option, that is switchable virtual desktops on the primary monitor, and non-switchable virtual desktops on other monitors.
 
 When the script is enabled, all windows placed on monitors other than the primary, are automatically set to be shown on all virtual desktops. This can be considered a hack, but from the user's perspective, this effectively results in having multiple switchable virtual desktops on the primary monitor, and fixed non-switchable virtual desktops on other monitors. That's how GNOME Shell handles workspaces by default, and the script mimics that.
 
 Besides enabling the script in the System Settings, no additional steps are required.
+
+## License
+
+[GNU General Public License v3.0](LICENSE)
