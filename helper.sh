@@ -2,11 +2,42 @@
 
 printUsage() {
     echo "Usage: helper.sh install|uninstall|upgrade|package name-of-the-script"
-    echo "   or: helper.sh showInteractiveConsole"
+    echo "   or: helper.sh showConsole"
+}
+
+install() {
+    scriptName=$1
+    kpackagetool5 -i "$scriptName"
+}
+
+uninstall() {
+    scriptName=$1
+    kpackagetool5 -r "$scriptName"
+}
+
+upgrade() {
+    scriptName=$1
+    kpackagetool5 -u "$scriptName"
+}
+
+package() {
+    scriptName=$1
+
+    [[ ! -d "$scriptName" ]] && {
+        echo "No such script '$scriptName'"
+        exit 1
+    }
+
+    (
+        cd "$scriptName"
+        scriptVersion=$(grep -Po "Version=\K(.*)" metadata.desktop)
+        zip -r "$scriptName-$scriptVersion.kwinscript" contents metadata.desktop
+    )
 }
 
 case $1 in
     install|uninstall|upgrade|package)
+        command=$1
         scriptName=$2
 
         [[ -z "$scriptName" ]] && {
@@ -14,38 +45,10 @@ case $1 in
             exit 1
         }
 
-        case $1 in
-            install)
-                kpackagetool5 -i "$scriptName"
-                ;;
-
-            uninstall)
-                kpackagetool5 -r "$scriptName"
-                ;;
-
-            upgrade)
-                kpackagetool5 -u "$scriptName"
-                ;;
-
-            package)
-                cd "$scriptName" 2>/dev/null || {
-                    echo "No such script '$scriptName'"
-                    exit 1
-                }
-
-                scriptVersion=$(grep -Po "Version=\K(.*)" metadata.desktop)
-                zip -r "$scriptName-$scriptVersion.kwinscript" contents metadata.desktop
-
-                cd ..
-                ;;
-            *)
-                printUsage
-                exit 1
-                ;;
-        esac
+        $command "$scriptName"
     ;;
 
-    showInteractiveConsole)
+    showConsole)
         qdbus org.kde.plasmashell /PlasmaShell showInteractiveKWinConsole
         ;;
 
