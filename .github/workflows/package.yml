@@ -6,9 +6,11 @@ on:
         script:
           description: Script
           required: true
-        commit:
+
+        ref:
           description: Commit/tag
-          required: false
+          required: true
+          default: master
 
 jobs:
   package:
@@ -16,42 +18,33 @@ jobs:
     steps:
       - name: Checkout branch
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.ref }}
 
       - name: Package script
+        id: package-script
         shell: bash
         run: |
-          SCRIPT=${{ github.event.inputs.script }}
-          [[ -z "$SCRIPT" ]] && {
+          script=${{ github.event.inputs.script }}
+          [[ -z "$script" ]] && {
               echo "No script provided!"
               exit 1
           }
 
-          COMMIT=${{ github.event.inputs.commit }}
-          [[ -z "$COMMIT" ]] && {
-              COMMIT="."
-          }
-
-          git fetch --unshallow && \
-          git checkout "$COMMIT" || {
-              echo "Couldn't checkout!"
-          }
-
-          cd "$SCRIPT" || {
-              echo "Couldn't cd!"
-          }
-
-          ../helper.sh package || {
+          ./helper.sh package "$script" || {
               echo "Couldn't package!"
+              exit 1
           }
 
-          ASSET_NAME=$(ls *.kwinscript | head -n 1)
-          ASSET_PATH="$SCRIPT/$ASSET_NAME"
+          assetName=$(cd "$script" && ls *.kwinscript | head -n 1)
+          assetPath=$script/$assetName
 
-          echo "ASSET_NAME=$ASSET_NAME" >> $GITHUB_ENV
-          echo "ASSET_PATH=$ASSET_PATH" >> $GITHUB_ENV
+          echo "::set-output name=assetName::$assetName"
+          echo "::set-output name=assetPath::$assetPath"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ env.ASSET_NAME }}
-          path: ${{ env.ASSET_PATH }}
+          name: ${{ steps.package-script.outputs.assetName }}
+          path: ${{ steps.package-script.outputs.assetPath }}
