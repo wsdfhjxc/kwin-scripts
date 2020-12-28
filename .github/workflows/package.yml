@@ -16,11 +16,8 @@ jobs:
   package:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout branch
+      - name: Checkout repository
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.inputs.ref }}
 
       - name: Package script
         id: package-script
@@ -31,6 +28,10 @@ jobs:
               echo "No script provided!"
               exit 1
           }
+
+          git fetch --unshallow
+          git checkout ${{ github.event.inputs.ref }}
+          git checkout master -- helper.sh
 
           ./helper.sh package "$script" || {
               echo "Couldn't package!"
