@@ -8,7 +8,7 @@ function bind(window) {
 function update(window) {
     var window = window || this;
     
-    if (!window.normalWindow && window.skipTaskbar) {
+    if (window.desktopWindow || window.dock || (!window.normalWindow && window.skipTaskbar)) {
         return;
     }
 
