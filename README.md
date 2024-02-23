@@ -9,6 +9,7 @@ The scripts are intended to be used under KDE Plasma.
 - [Installation](#installation)
   - [From source](#from-source)
   - [kwinscript file](#kwinscript-file)
+  - [Using nix](#using-nix)
 - [Available scripts](#available-scripts)
   - [Simple Window Groups](#simple-window-groups)
   - [Task Manager - Do It Yourself Bar](#task-manager---do-it-yourself-bar)
@@ -45,6 +46,24 @@ After installing the script, it must be also enabled in the System Settings.
 Visit the [releases section](https://github.com/wsdfhjxc/kwin-scripts/releases) and download the kwinscript file of a chosen script.
 
 After that, you will be able to select this file in System Settings (KWin Scripts, Install from File).
+
+### Using nix
+
+1. Open your `flake.nix` file and add the repository as an input.
+```nix
+inputs.kwin-scripts.url = "github:wsdfhjxc/kwin-scripts";
+```
+
+2. Add the package you want to include from this repository in your `nixosConfigurations`.
+
+```nix
+environment.systemPackages = with pkgs; [
+  ...
+  inputs.kwin-scripts.packages.x86_64-linux.virtual-desktops-only-on-primary
+];
+```
+
+3. Run `nixos-rebuild switch` to apply the changes.
 
 ## Available scripts
 
